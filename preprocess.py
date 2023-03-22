@@ -1,6 +1,8 @@
 import nltk
 from nltk.corpus import stopwords
 import gensim
+import language_tool_python
+from spellchecker import SpellChecker
 from gensim.models import Phrases
 from gensim.models.phrases import Phraser
 from gensim.corpora import Dictionary
@@ -69,3 +71,16 @@ def tfidf_rep(word_list):
     # Fit and transform
     X = vect.fit_transform(word_list)
     return X
+
+def correct_text(text):
+    my_tool = language_tool_python.LanguageTool('en-US')
+    correct_text = my_tool.correct(text)
+    return correct_text
+
+def spell_check(text):
+    spell  = SpellChecker()
+    correct_word = []
+    mispelled_word = text.split()
+    for word in mispelled_word:
+        correct_word.append(spell.correction(word))
+    return ' '.join(correct_word)
